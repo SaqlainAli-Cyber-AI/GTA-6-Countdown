@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA 6 Countdown</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap');
+        
+        body {
+            margin: 0;
+            background: transparent; /* Allows background video to show through */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            font-style: italic;
+            color: #ffffff;
+            text-align: center;
+            user-select: none;
+        }
+
+        .countdown-container {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .timer {
+            font-size: 6.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            font-variant-numeric: tabular-nums; /* Prevents shifting numbers from shaking the layout */
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f, 0 0 80px #00f0ff;
+        }
+
+        .label {
+            font-size: 1.8rem;
+            color: #00f0ff;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            text-shadow: 0 0 5px #00f0ff, 0 0 15px #00f0ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown-container">
+        <div class="timer" id="clock">000:00:00:00</div>
+        <div class="label">Time Until Return to Vice City</div>
+    </div>
+
+    <script>
+        // Target Release Date: November 19, 2026, at 00:00:00 UTC (Universal Time)
+        // Adjust the 'Z' offset if a specific regional timezone is announced later
+        const targetDate = new Date('2026-11-19T00:00:00Z').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                document.getElementById('clock').innerText = "000:00:00:00";
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            // Force fixed-width text formatting
+            const dStr = String(days).padStart(3, '0');
+            const hStr = String(hours).padStart(2, '0');
+            const mStr = String(minutes).padStart(2, '0');
+            const sStr = String(seconds).padStart(2, '0');
+
+            document.getElementById('clock').innerText = `${dStr}:${hStr}:${mStr}:${sStr}`;
+        }
+
+        // Run every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
