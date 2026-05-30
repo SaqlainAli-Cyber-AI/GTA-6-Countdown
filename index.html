@@ -3,86 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTA 6 Countdown</title>
+    <title>Vice City Countdown</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,900&display=swap');
-        
         body {
-            margin: 0;
-            background: transparent; /* Allows background video to show through */
-            overflow: hidden;
+            /* Completely pure white background */
+            background-color: #ffffff; 
+            font-family: 'Arial Black', Gadget, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Montserrat', sans-serif;
-            font-style: italic;
-            color: #ffffff;
-            text-align: center;
-            user-select: none;
+            margin: 0;
+            overflow: hidden;
         }
 
-        .countdown-container {
-            padding: 30px;
+        .container {
+            text-align: center;
+        }
+
+        .title {
+            /* Text above filled completely with the cyan blue color */
+            color: #00f0ff;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 5px #00f0ff, 0 0 25px #00f0ff;
+        }
+
+        .countdown-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .time-box {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            align-items: center;
+            min-width: 140px;
         }
 
-        .timer {
+        .number {
             font-size: 6.5rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            font-variant-numeric: tabular-nums; /* Prevents shifting numbers from shaking the layout */
-            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f, 0 0 40px #ff007f, 0 0 80px #00f0ff;
+            font-weight: bold;
+            /* White core with pink neon sides matching the picture */
+            color: #ffffff;
+            line-height: 1;
+            text-shadow: 
+                -2px -2px 0 #e91e63,  
+                 2px -2px 0 #e91e63,
+                -2px  1px 0 #e91e63,
+                 2px  1px 0 #e91e63,
+                 0 0 25px rgba(233, 30, 99, 0.5);
         }
 
         .label {
-            font-size: 1.8rem;
+            /* Text below filled completely with the cyan blue color */
             color: #00f0ff;
+            font-size: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 6px;
-            text-shadow: 0 0 5px #00f0ff, 0 0 15px #00f0ff;
+            margin-top: 15px;
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 3px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #00f0ff, 0 0 20px #00f0ff;
+        }
+
+        .separator {
+            font-size: 6.5rem;
+            color: #ffffff;
+            line-height: 1;
+            margin-bottom: 30px; 
+            text-shadow: 
+                -2px -2px 0 #e91e63,  
+                 2px -2px 0 #e91e63,
+                -2px  1px 0 #e91e63,
+                 2px  1px 0 #e91e63;
         }
     </style>
 </head>
 <body>
-    <div class="countdown-container">
-        <div class="timer" id="clock">000:00:00:00</div>
-        <div class="label">Time Until Return to Vice City</div>
+
+    <div class="container">
+        <!-- Blue filled text above -->
+        <div class="title">Time Until Return To Vice City</div>
+        
+        <div class="countdown-wrapper">
+            <!-- Months -->
+            <div class="time-box">
+                <span class="number" id="months">00</span>
+                <!-- Blue filled text below -->
+                <span class="label">Months</span>
+            </div>
+            <div class="separator">:</div>
+
+            <!-- Days -->
+            <div class="time-box">
+                <span class="number" id="days">00</span>
+                <span class="label">Days</span>
+            </div>
+            <div class="separator">:</div>
+
+            <!-- Hours -->
+            <div class="time-box">
+                <span class="number" id="hours">00</span>
+                <span class="label">Hours</span>
+            </div>
+            <div class="separator">:</div>
+
+            <!-- Minutes -->
+            <div class="time-box">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minutes</span>
+            </div>
+            <div class="separator">:</div>
+
+            <!-- Seconds -->
+            <div class="time-box">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Seconds</span>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Target Release Date: November 19, 2026, at 00:00:00 UTC (Universal Time)
-        // Adjust the 'Z' offset if a specific regional timezone is announced later
-        const targetDate = new Date('2026-11-19T00:00:00Z').getTime();
+        // Set target date here (Year, Month [0-11], Day, Hour, Minute, Second)
+        const targetDate = new Date(2026, 11, 31, 0, 0, 0).getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
             const difference = targetDate - now;
 
             if (difference <= 0) {
-                document.getElementById('clock').innerText = "000:00:00:00";
+                document.querySelector('.container').innerHTML = "<div class='title'>Welcome back to Vice City!</div>";
+                clearInterval(interval);
                 return;
             }
 
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+            // Calculations
+            const totalSeconds = Math.floor(difference / 1000);
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalDays = Math.floor(totalHours / 24);
 
-            // Force fixed-width text formatting
-            const dStr = String(days).padStart(3, '0');
-            const hStr = String(hours).padStart(2, '0');
-            const mStr = String(minutes).padStart(2, '0');
-            const sStr = String(seconds).padStart(2, '0');
+            // Months conversion logic
+            const months = Math.floor(totalDays / 30.44);
+            const days = Math.floor(totalDays % 30.44);
+            const hours = totalHours % 24;
+            const minutes = totalMinutes % 60;
+            const seconds = totalSeconds % 60;
 
-            document.getElementById('clock').innerText = `${dStr}:${hStr}:${mStr}:${sStr}`;
+            // Display results with leading zeros
+            document.getElementById('months').innerText = String(months).padStart(2, '0');
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
         }
 
-        // Run every second
-        setInterval(updateCountdown, 1000);
         updateCountdown();
+        const interval = setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
